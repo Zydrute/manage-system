@@ -1,0 +1,33 @@
+{% if users != null %}
+    {% for user in users %}
+        <table>
+            <thead>
+                <tr>
+                    <th>User ID</th>
+                    <th>Username</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{user.id}}</td>
+                    <td>{{user.username}}</td>
+                    <td><a href="{{ path('delete_user_from_group_submit', { 'groupId': groupId, 'userId': user.id}) }}">Delete user from group</a></td>
+                </tr>
+            </tbody>
+        </table>
+
+    {% endfor %}
+
+{% else %}
+    This group doesn't have users!
+    <button onclick="goBack()">Go Back</button>
+{% endif %}
+
+{% block javascript %}
+<script>
+    function goBack() {
+      window.history.back();
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,55 @@
+{% block body %}
+
+<h1>User management system</h1>
+
+<a href="{{ path('add_user') }}">Add user</a>
+<a href="{{ path('add_group') }}">Add group</a>
+
+<h1>User list</h1>
+{% if users %}
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+                <tr>
+                    <td>{{user.id}}</td>
+                    <td>{{user.username}}</td>
+                    <td><a href="{{ path('delete_user', { 'id': user.id}) }}">Delete user</a></td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endif %}
+
+<h1>Group list</h1>
+{% if groups %}
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for group in groups %}
+                <tr>
+                    <td>{{group.id}}</td>
+                    <td>{{group.name}}</td>
+                    <td>
+                        <a href="{{ path('delete_group', { 'id': group.id}) }}">Delete group</a>
+                        <a href="{{ path('add_user_into_group', { 'id': group.id}) }}">Add user into group</a>
+                        <a href="{{ path('delete_user_from_group', { 'id': group.id}) }}">Delete user from group</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endif %}
+{% endblock %}
