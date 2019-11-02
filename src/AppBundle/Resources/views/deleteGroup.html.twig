@@ -1,6 +1,11 @@
-{{message}}
+{% if app.session.flashBag.has('message') %}
+    <div class="alert alert-success">
+        {% for msg in app.session.flashBag.get('message') %}
+            {{ msg }}
+        {% endfor %}
+    </div>
+{% endif %}
 <button onclick="goBack()">Go Back</button>
-
 
 {% block javascript %}
 <script>

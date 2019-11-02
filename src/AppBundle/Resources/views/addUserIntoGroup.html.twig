@@ -1,4 +1,14 @@
+{% block body %}
+{% if app.session.flashBag.has('message-group') %}
+    <div class="alert alert-success">
+        {% for msg in app.session.flashBag.get('message-group') %}
+            {{ msg }}
+        {% endfor %}
+    </div>
+{% endif %}
 {{ form_start(form) }}
     {{ form_row(form.username) }}
     {{ form_row(form.submit) }}
 {{ form_end(form) }}
+
+{% endblock %}

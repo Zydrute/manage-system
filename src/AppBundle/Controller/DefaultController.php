@@ -67,7 +67,7 @@ class DefaultController extends Controller
      * @Security("has_role('ROLE_ADMIN')")
      * @Route("/delete-user/{id}", name="delete_user")
      */
-    public function deleteUserAction($id)
+    public function deleteUserAction($id, Request $request)
     {
         $em = $this->getDoctrine()->getManager();
         $user = $em->getRepository('AppBundle:User')->find($id);
@@ -77,7 +77,9 @@ class DefaultController extends Controller
             $em->remove($user);
             $em->flush();
         }else{
-            echo 'User is in a group. First, please remove user from a group!';
+            $request->getSession()
+            ->getFlashBag()
+            ->add('not-success', 'User is in a group. First, please remove user from a group!');
         }
         return $this->redirectToRoute ('manage');
     }
@@ -109,7 +111,7 @@ class DefaultController extends Controller
      * @Security("has_role('ROLE_ADMIN')")
      * @Route("/delete-group/{id}", name="delete_group")
      */
-    public function deleteGroupAction($id)
+    public function deleteGroupAction($id, Request $request)
     {
         $em = $this->getDoctrine()->getManager();
         $usersInGroup = $em->getRepository('AppBundle:GroupsLogs')->findUsersIdsByGroupId($id);
@@ -119,11 +121,12 @@ class DefaultController extends Controller
             $em->flush();
             return $this->redirectToRoute('manage');
         }else{
-            $message = 'Group has users!First, delete users.';
+            $request->getSession()
+            ->getFlashBag()
+            ->add('message', 'Group has users!First, delete users.');
         }
         
-        return $this->render('AppBundle::deleteGroup.html.twig', array(
-            'message' => $message));
+        return $this->render('AppBundle::deleteGroup.html.twig');
     }
 
     /**
@@ -148,7 +151,9 @@ class DefaultController extends Controller
                 $em->flush();
                 return $this->redirectToRoute('manage');
             }else{
-                echo 'User is a part of this group!';
+                $request->getSession()
+                ->getFlashBag()
+                ->add('message-group', 'User is a part of this group!');
             }           
         }
         return $this->render('AppBundle::addUserIntoGroup.html.twig', array(
@@ -182,7 +187,7 @@ class DefaultController extends Controller
      * @Security("has_role('ROLE_ADMIN')")
      * @Route("/delete-user-from-group-submit/{groupId}/{userId}", name="delete_user_from_group_submit")
      */
-    public function deleteUserFromGroupSubmitAction($groupId, $userId)
+    public function deleteUserFromGroupSubmitAction($groupId, $userId, Request $request)
     {
         $em = $this->getDoctrine()->getManager();
         $groupLog = $em->getRepository('AppBundle:GroupsLogs')->findGroupLog($userId, $groupId);
@@ -190,7 +195,9 @@ class DefaultController extends Controller
             $em->remove($groupLog[0]);
             $em->flush();
         }else{
-            echo 'Error!';
+            $request->getSession()
+                ->getFlashBag()
+                ->add('error', 'Error!');
         }
         return $this->redirectToRoute ('manage');
        

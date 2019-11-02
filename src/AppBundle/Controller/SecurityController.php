@@ -62,7 +62,7 @@ class SecurityController extends Controller
             $entityManager->persist($user);
             $entityManager->flush();
 
-            return $this->redirectToRoute('success_registration');
+            return $this->redirectToRoute('login');
         }
 
         return $this->render(
